@@ -35,7 +35,7 @@ class TodoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey[400],
+      color: isCompleted ? Colors.grey[400] : Colors.grey[600],
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(
@@ -47,8 +47,13 @@ class TodoCard extends StatelessWidget {
                   Text(
                     task,
                     style: TextStyle(
+                      color: isCompleted ? Colors.grey[200] : Colors.black,
                       fontSize: 16,
                       overflow: TextOverflow.ellipsis,
+                      decoration:
+                          isCompleted
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
                     ),
                   ),
                   Text(
@@ -62,38 +67,48 @@ class TodoCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 8),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.check_circle_outline_rounded,
-                color: Colors.green,
+            if (!isCompleted) ...[
+              //
+              IconButton(
+                onPressed:
+                    () => _editTask(
+                      Task(
+                        task: task,
+                        deadline: deadline,
+                        isCompleted: !isCompleted,
+                      ),
+                    ),
+                icon: Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: Colors.limeAccent,
+                ),
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                taskController.text = task;
-                dateController.text = "${deadline.toLocal()}".split(' ')[0];
-                showTaskDialog(
-                  context: context,
-                  title: 'Add Task',
-                  taskController: taskController,
-                  dateController: dateController,
-                  initialDate: DateTime.now(),
-                  onSave: () {
-                    if (taskController.text.isNotEmpty &&
-                        dateController.text.isNotEmpty) {
-                      final updatedTask = Task(
-                        task: taskController.text,
-                        deadline: DateTime.parse(dateController.text),
-                        isCompleted: isCompleted ? true : false,
-                      );
-                      _editTask(updatedTask);
-                    }
-                  },
-                );
-              },
-              icon: Icon(Icons.border_color_sharp, color: Colors.blue),
-            ),
+              IconButton(
+                onPressed: () {
+                  taskController.text = task;
+                  dateController.text = "${deadline.toLocal()}".split(' ')[0];
+                  showTaskDialog(
+                    context: context,
+                    title: 'Edit Task',
+                    taskController: taskController,
+                    dateController: dateController,
+                    initialDate: DateTime.now(),
+                    onSave: () {
+                      if (taskController.text.isNotEmpty &&
+                          dateController.text.isNotEmpty) {
+                        final updatedTask = Task(
+                          task: taskController.text,
+                          deadline: DateTime.parse(dateController.text),
+                          isCompleted: isCompleted ? true : false,
+                        );
+                        _editTask(updatedTask);
+                      }
+                    },
+                  );
+                },
+                icon: Icon(Icons.border_color_sharp, color: Colors.lightBlue),
+              ),
+            ],
             IconButton(
               onPressed: () => _deleteTask(context),
               icon: Icon(Icons.delete, color: Colors.red),
