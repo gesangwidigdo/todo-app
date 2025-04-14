@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/model/task_list.dart';
 import 'package:todo_app/screen/main_screen.dart';
 
 void main() {
@@ -10,11 +11,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> todo = <String>['A', 'B', 'C'];
+    final List<TaskList> _todo = taskList;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ToDo App',
-      home: MainScreen(todo: todo),
+      home: MainScreen(todo: _todo),
     );
   }
 }

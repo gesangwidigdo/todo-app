@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/model/task_list.dart';
 import 'package:todo_app/widget/todo_card.dart';
+import 'package:todo_app/widget/form_button.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key, required this.todo});
 
-  final List<String> todo;
+  final List<TaskList> todo;
+
+  // add data
+  void _addTask() {
+    // 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,9 @@ class MainScreen extends StatelessWidget {
         child: ListView.builder(
           itemCount: todo.length,
           itemBuilder: (context, index) {
-            return TodoCard(todoItem: todo[index]);
+            taskList.sort((a, b) => b.deadline.compareTo(a.deadline));
+            final _taskItem = taskList[index];
+            return TodoCard(task: _taskItem.task, deadline: _taskItem.deadline);
           },
         ),
       ),
@@ -45,6 +54,23 @@ class MainScreen extends StatelessWidget {
                   border: UnderlineInputBorder(),
                   labelText: 'Task Name',
                 ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  FormButton(
+                    buttonText: 'Cancel',
+                    backgroundColor: Colors.red,
+                    buttonFunction: () => Navigator.of(context).pop(),
+                  ),
+                  const SizedBox(width: 8),
+                  FormButton(
+                    buttonText: 'Add',
+                    backgroundColor: Colors.green,
+                    buttonFunction: () {},
+                  ),
+                ],
               ),
             ],
           ),

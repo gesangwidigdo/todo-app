@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class TodoCard extends StatelessWidget {
-  const TodoCard({super.key, required this.todoItem});
+  const TodoCard({super.key, required this.task, required this.deadline});
 
-  final String todoItem;
+  final String task;
+  final DateTime deadline;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,16 @@ class TodoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    todoItem,
+                    task,
                     style: TextStyle(
                       fontSize: 16,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  Text(
+                    'Deadline: ${deadline.day}/${deadline.month}/${deadline.year}',
+                    style: TextStyle(
+                      fontSize: 12,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
