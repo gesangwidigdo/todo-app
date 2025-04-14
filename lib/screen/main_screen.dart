@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/model/task_list.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todo_app/model/task.dart';
 import 'package:todo_app/widget/todo_card.dart';
 import 'package:todo_app/widget/form_button.dart';
 
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key, required this.todo});
+  MainScreen({super.key});
 
-  final List<TaskList> todo;
+  final Box<Task> _taskBox = Hive.box<Task>('taskBox');
+
+  final TextEditingController taskController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
 
   // add data
-  void _addTask() {
-    // 
+  void _addTask(Task task) {
+    final key = 'key_${DateTime.now().millisecondsSinceEpoch}';
+    _taskBox.put(key, task);
   }
 
   @override
@@ -23,12 +28,19 @@ class MainScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: todo.length,
-          itemBuilder: (context, index) {
-            taskList.sort((a, b) => b.deadline.compareTo(a.deadline));
-            final _taskItem = taskList[index];
-            return TodoCard(task: _taskItem.task, deadline: _taskItem.deadline);
+        child: ValueListenableBuilder(
+          valueListenable: _taskBox.listenable(),
+          builder: (context, Box<Task> box, _) {
+            // Listen for changes in the box and rebuild the UI
+            final taskList = box.values.toList();
+
+            return ListView.builder(
+              itemCount: taskList.length,
+              itemBuilder: (context, index) {
+                final task = taskList[index];
+                return TodoCard(task: task.task, deadline: task.deadline);
+              },
+            );
           },
         ),
       ),
@@ -41,6 +53,23 @@ class MainScreen extends StatelessWidget {
   }
 
   Future<void> _addDialog(BuildContext context) {
+    // Date and time variables
+    DateTime selectedDate = DateTime.now();
+
+    // Show date picker
+    void _selectDate() async {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2101),
+      );
+      if (picked != null && picked != selectedDate) {
+        selectedDate = picked;
+        dateController.text = "${selectedDate.toLocal()}".split(' ')[0];
+      }
+    }
+
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -50,10 +79,23 @@ class MainScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
+                controller: taskController,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
                   labelText: 'Task Name',
                 ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: dateController,
+                decoration: const InputDecoration(
+                  labelText: 'Select Deadline Date',
+                  border: UnderlineInputBorder(),
+                ),
+                readOnly: true,
+                onTap: () {
+                  _selectDate();
+                },
               ),
               const SizedBox(height: 16),
               Row(
@@ -68,7 +110,17 @@ class MainScreen extends StatelessWidget {
                   FormButton(
                     buttonText: 'Add',
                     backgroundColor: Colors.green,
-                    buttonFunction: () {},
+                    buttonFunction: () {
+                      print(taskController.text);
+                      if (taskController.text.isNotEmpty) {
+                        final task = Task(
+                          task: taskController.text,
+                          deadline: selectedDate,
+                        );
+                        _addTask(task);
+                        Navigator.pop(context);
+                      }
+                    },
                   ),
                 ],
               ),
