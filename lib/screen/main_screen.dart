@@ -33,6 +33,7 @@ class MainScreen extends StatelessWidget {
           builder: (context, Box<Task> box, _) {
             // Listen for changes in the box and rebuild the UI
             final taskList = box.values.toList();
+            taskList.sort((a, b) => a.deadline.compareTo(b.deadline));
 
             return ListView.builder(
               itemCount: taskList.length,
