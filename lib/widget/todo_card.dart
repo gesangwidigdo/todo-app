@@ -8,6 +8,7 @@ class TodoCard extends StatelessWidget {
     super.key,
     required this.task,
     required this.deadline,
+    required this.isCompleted,
     required this.taskKey,
   });
 
@@ -15,6 +16,7 @@ class TodoCard extends StatelessWidget {
 
   final String task;
   final DateTime deadline;
+  bool isCompleted;
   final dynamic taskKey;
 
   final TextEditingController taskController = TextEditingController();
@@ -83,6 +85,7 @@ class TodoCard extends StatelessWidget {
                       final updatedTask = Task(
                         task: taskController.text,
                         deadline: DateTime.parse(dateController.text),
+                        isCompleted: isCompleted ? true : false,
                       );
                       _editTask(updatedTask);
                     }

@@ -10,6 +10,8 @@ class Task extends HiveObject {
   @HiveField(1)
   DateTime deadline;
 
-  Task({required this.task, required this.deadline});
+  @HiveField(2)
+  bool isCompleted;
 
+  Task({required this.task, required this.deadline, required this.isCompleted});
 }

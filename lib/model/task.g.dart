@@ -19,17 +19,20 @@ class TaskAdapter extends TypeAdapter<Task> {
     return Task(
       task: fields[0] as String,
       deadline: fields[1] as DateTime,
+      isCompleted: fields[2] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.task)
       ..writeByte(1)
-      ..write(obj.deadline);
+      ..write(obj.deadline)
+      ..writeByte(2)
+      ..write(obj.isCompleted);
   }
 
   @override

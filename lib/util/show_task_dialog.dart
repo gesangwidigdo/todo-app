@@ -69,6 +69,8 @@ Future<void> showTaskDialog({
                   buttonFunction: () {
                     onSave();
                     Navigator.pop(context);
+                    taskController.clear();
+                    dateController.clear();
                   },
                 ),
               ],

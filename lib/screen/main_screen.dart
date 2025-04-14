@@ -42,6 +42,7 @@ class MainScreen extends StatelessWidget {
                 return TodoCard(
                   task: task.task,
                   deadline: task.deadline,
+                  isCompleted: task.isCompleted,
                   taskKey: _taskKey,
                 );
               },
@@ -62,6 +63,7 @@ class MainScreen extends StatelessWidget {
                   final task = Task(
                     task: taskController.text,
                     deadline: DateTime.parse(dateController.text),
+                    isCompleted: false,
                   );
                   _addTask(task);
                 }
