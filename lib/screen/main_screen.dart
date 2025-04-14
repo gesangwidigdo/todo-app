@@ -38,7 +38,12 @@ class MainScreen extends StatelessWidget {
               itemCount: taskList.length,
               itemBuilder: (context, index) {
                 final task = taskList[index];
-                return TodoCard(task: task.task, deadline: task.deadline);
+                final _taskKey = _taskBox.keyAt(index);
+                return TodoCard(
+                  task: task.task,
+                  deadline: task.deadline,
+                  taskKey: _taskKey,
+                );
               },
             );
           },

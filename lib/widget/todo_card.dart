@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todo_app/model/task.dart';
 
 class TodoCard extends StatelessWidget {
-  const TodoCard({super.key, required this.task, required this.deadline});
+  TodoCard({
+    super.key,
+    required this.task,
+    required this.deadline,
+    required this.taskKey,
+  });
+
+  final Box<Task> _taskBox = Hive.box<Task>('taskBox');
 
   final String task;
   final DateTime deadline;
+  final dynamic taskKey;
+
+  void _deleteTask(BuildContext context) {
+    _taskBox.delete(taskKey);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +62,7 @@ class TodoCard extends StatelessWidget {
               icon: Icon(Icons.border_color_sharp, color: Colors.blue),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () => _deleteTask(context),
               icon: Icon(Icons.delete, color: Colors.red),
             ),
           ],
