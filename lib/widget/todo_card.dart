@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:todo_app/model/task.dart';
+import 'package:todo_app/util/show_task_dialog.dart';
 
 class TodoCard extends StatelessWidget {
   TodoCard({
@@ -16,8 +17,17 @@ class TodoCard extends StatelessWidget {
   final DateTime deadline;
   final dynamic taskKey;
 
+  final TextEditingController taskController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+
+  // delete task
   void _deleteTask(BuildContext context) {
     _taskBox.delete(taskKey);
+  }
+
+  // edit task
+  void _editTask(Task updatedTask) {
+    _taskBox.put(taskKey, updatedTask);
   }
 
   @override
@@ -58,7 +68,27 @@ class TodoCard extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                taskController.text = task;
+                dateController.text = "${deadline.toLocal()}".split(' ')[0];
+                showTaskDialog(
+                  context: context,
+                  title: 'Add Task',
+                  taskController: taskController,
+                  dateController: dateController,
+                  initialDate: DateTime.now(),
+                  onSave: () {
+                    if (taskController.text.isNotEmpty &&
+                        dateController.text.isNotEmpty) {
+                      final updatedTask = Task(
+                        task: taskController.text,
+                        deadline: DateTime.parse(dateController.text),
+                      );
+                      _editTask(updatedTask);
+                    }
+                  },
+                );
+              },
               icon: Icon(Icons.border_color_sharp, color: Colors.blue),
             ),
             IconButton(
