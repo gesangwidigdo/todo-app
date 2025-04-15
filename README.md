@@ -15,6 +15,25 @@
 
 Aplikasi dibuat menggunakan database yang terpasang di lokal, yaitu **Hive**.
 
+### Install Dependency
+
+Sebelum menggunakan Hive, perlu diinstall terlebih dahulu dependency nya dengan menambahkan baris berikut di `pubspec.yaml`.
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  hive_generator: ^1.1.3
+  build_runner: ^2.1.11
+```
+
 ### Inisiasi
 
 Inisiasi dilakukan pada fungsi `main()` di file `main.dart` dengan menambahkan line `await Hive.initFlutter();`. Setelah itu ditambahkan percabangan untuk mengecek apakah database dengan nama **taskBox** sudah ada atau belum menggunakan fungsi `isBoxOpen()`. Jika belum ada, maka dibuat database baru dengan fungsi `openBox()`. Fungsi ini dipanggil secara *asynchronous*, sehingga fungsi main diubah menjadi *async function*.
