@@ -38,10 +38,10 @@ class MainScreen extends StatelessWidget {
             return ListView.builder(
               itemCount: taskList.length,
               itemBuilder: (context, index) {
-                final _taskIndex = _taskBox.keys.toList().indexOf(
+                final _taskKeyIndex = _taskBox.keys.toList().indexOf(
                   taskList[index].key,
                 );
-                final task = _taskBox.getAt(_taskIndex);
+                final task = _taskBox.getAt(_taskKeyIndex);
                 return TodoCard(
                   task: task!.task,
                   deadline: task.deadline,
