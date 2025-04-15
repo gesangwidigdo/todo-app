@@ -34,6 +34,12 @@ dev_dependencies:
   build_runner: ^2.1.11
 ```
 
+Kemudian tekan tombol untuk install dependency di atas, atau dapat dengan menjalankan perintah berikut di terminal.
+
+```bash
+flutter pub get
+```
+
 ### Inisiasi
 
 Inisiasi dilakukan pada fungsi `main()` di file `main.dart` dengan menambahkan line `await Hive.initFlutter();`. Setelah itu ditambahkan percabangan untuk mengecek apakah database dengan nama **taskBox** sudah ada atau belum menggunakan fungsi `isBoxOpen()`. Jika belum ada, maka dibuat database baru dengan fungsi `openBox()`. Fungsi ini dipanggil secara *asynchronous*, sehingga fungsi main diubah menjadi *async function*.
